@@ -203,12 +203,6 @@ module Xml_of_type = Ppx_conv_func.Of_complete (struct
 
 end)
 
-let lambda_sig loc arg_tys body_ty =
-  List.fold_right arg_tys ~init:body_ty ~f:(fun arg_ty acc ->
-    [%type: [%t arg_ty] -> [%t acc] ])
-
-let make_type_definition loc ~tps ty = ptyp_constr ~loc ty tps
-
 let make_xsd_definition loc arg_tys =
   List.fold_right arg_tys ~init:[%type: Csvfields.Xml.xml list ]
     ~f:(fun _arg_ty acc ->
@@ -237,7 +231,6 @@ let xml_record_sig ~tps ~record_name loc =
   ; psig_value ~loc (value_description ~loc ~name:(Located.mk ~loc "to_xml") ~type_:to_xml ~prim:[])
   ; psig_value ~loc (value_description ~loc ~name:(Located.mk ~loc "of_xml") ~type_:of_xml ~prim:[])
   ]
-  |> Type_conv.Generator_result.make_just_after
 
 let param_of_ctyp ty =
   match ty.ptyp_desc with
@@ -349,14 +342,10 @@ let xml_record ~tps ~record_name:_ loc lds =
   let xsd = xsd ~tps ~lds loc in
   let to_xml = to_xml ~tps ~lds loc in
   let of_xml = of_xml ~tps ~lds loc in
-  Type_conv.Generator_result.make_just_after
-    [ to_xml
-    ; of_xml
-    ; xsd
-    ]
-
-let many_of_record of_record ~tps ~record_name loc _ _ =
-  of_record ~tps ~record_name loc
+  [ to_xml
+  ; of_xml
+  ; xsd
+  ]
 
 let raise_unsupported ~loc s =
   Location.raise_errorf ~loc
