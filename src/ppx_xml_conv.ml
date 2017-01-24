@@ -1,11 +1,6 @@
-open! StdLabels
-open Ppx_core.Std
+open Ppx_core
 open Ppx_type_conv.Std
-open Asttypes
-open Parsetree
 open Ast_builder.Default
-
-[@@@metaloc loc]
 
 let extension_name = "xml"
 
@@ -20,10 +15,10 @@ let xsd_function_name = function
 
 let edot ~loc path_opt id =
   pexp_ident ~loc
-    (Located.mk ~loc @@
-     match path_opt with
-     | None   -> Longident.Lident id
-     | Some p -> Longident.Ldot (p, id))
+    (Located.mk ~loc
+     (match path_opt with
+      | None   -> Longident.Lident id
+      | Some p -> Longident.Ldot (p, id)))
 
 module Xsd_of_type = Ppx_conv_func.Of_complete (struct
   let unsupported_type_error_msg = unsupported_type_error_msg
