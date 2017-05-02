@@ -358,12 +358,12 @@ let generate_sig ~extension_name ~loc ~path ((_rf, tds) as x) =
   | [_] -> xml_sig_of_ty ~extension_name ~loc ~path x
   | _   -> raise_unsupported ~loc extension_name
 
-let () =
+let xml =
   Type_conv.add extension_name
     ~sig_type_decl:(Type_conv.Generator.make_noarg (generate_sig ~extension_name))
     ~str_type_decl:(Type_conv.Generator.make_noarg
                       (Ppx_conv_func.Gen_struct.generate
                          ~extension_name
-                         ~record:xml_record))
-  |> Type_conv.ignore
+                         ~record:xml_record)
+                      ~deps:[Ppx_fields_conv.fields])
 ;;
