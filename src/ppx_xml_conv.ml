@@ -1,5 +1,5 @@
-open Ppx_core
-open Ppx_type_conv.Std
+open Base
+open Ppxlib
 open Ast_builder.Default
 
 let extension_name = "xml"
@@ -359,9 +359,9 @@ let generate_sig ~extension_name ~loc ~path ((_rf, tds) as x) =
   | _   -> raise_unsupported ~loc extension_name
 
 let xml =
-  Type_conv.add extension_name
-    ~sig_type_decl:(Type_conv.Generator.make_noarg (generate_sig ~extension_name))
-    ~str_type_decl:(Type_conv.Generator.make_noarg
+  Deriving.add extension_name
+    ~sig_type_decl:(Deriving.Generator.make_noarg (generate_sig ~extension_name))
+    ~str_type_decl:(Deriving.Generator.make_noarg
                       (Ppx_conv_func.Gen_struct.generate
                          ~extension_name
                          ~record:xml_record)
