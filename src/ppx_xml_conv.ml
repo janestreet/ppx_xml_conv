@@ -328,9 +328,7 @@ let to_xml ~tps ~lds loc =
     prepend_at loc expr
   in
   let wrap_body body =
-    let tps =
-      make_parameter_functions loc ~function_name:xml_of_type_function_name tps
-    in
+    let tps = make_parameter_functions loc ~function_name:xml_of_type_function_name tps in
     let arguments = tps @ [ [%pat? t] ] in
     Ppx_conv_func.lambda loc arguments body
   in
