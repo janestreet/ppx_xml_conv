@@ -26,56 +26,56 @@ let edot ~loc path_opt id =
 ;;
 
 module Xsd_of_type = Ppx_conv_func.Of_complete (struct
-    let unsupported_type_error_msg = unsupported_type_error_msg
-    let conversion_name = extension_name
-    let function_name = xsd_function_name
+  let unsupported_type_error_msg = unsupported_type_error_msg
+  let conversion_name = extension_name
+  let function_name = xsd_function_name
 
-    let prepend loc body =
-      let acc loc = [%pat? acc] in
-      let anonymous loc = [%pat? _] in
-      let body = [%expr [%e body] :: acc] in
-      Ppx_conv_func.lambda loc [ acc loc; anonymous loc ] body
-    ;;
+  let prepend loc body =
+    let acc loc = [%pat? acc] in
+    let anonymous loc = [%pat? _] in
+    let body = [%expr [%e body] :: acc] in
+    Ppx_conv_func.lambda loc [ acc loc; anonymous loc ] body
+  ;;
 
-    let unit loc ~field_name:_ =
-      let expr = [%expr Csvfields.Xml.xsd_of_unit] in
-      prepend loc expr
-    ;;
+  let unit loc ~field_name:_ =
+    let expr = [%expr Csvfields.Xml.xsd_of_unit] in
+    prepend loc expr
+  ;;
 
-    let bool loc ~field_name:_ = [%expr Csvfields.Xml.xsd_of_bool]
-    let string loc ~field_name:_ = [%expr Csvfields.Xml.xsd_of_string]
-    let char loc ~field_name:_ = [%expr Csvfields.Xml.xsd_of_char]
-    let int loc ~field_name:_ = [%expr Csvfields.Xml.xsd_of_int]
-    let float loc ~field_name:_ = [%expr Csvfields.Xml.xsd_of_float]
-    let int32 loc ~field_name:_ = [%expr Csvfields.Xml.xsd_of_int32]
-    let int64 loc ~field_name:_ = [%expr Csvfields.Xml.xsd_of_int64]
-    let nativeint loc ~field_name:_ = [%expr Csvfields.Xml.xsd_of_nativeint]
-    let big_int loc ~field_name:_ = [%expr Csvfields.Xml.xsd_of_big_int]
-    let nat loc ~field_name:_ = [%expr Csvfields.Xml.xsd_of_nat]
-    let num loc ~field_name:_ = [%expr Csvfields.Xml.xsd_of_num]
-    let ratio loc ~field_name:_ = [%expr Csvfields.Xml.xsd_of_ratio]
-    let merge_recursive = useless_merge_recursive
+  let bool loc ~field_name:_ = [%expr Csvfields.Xml.xsd_of_bool]
+  let string loc ~field_name:_ = [%expr Csvfields.Xml.xsd_of_string]
+  let char loc ~field_name:_ = [%expr Csvfields.Xml.xsd_of_char]
+  let int loc ~field_name:_ = [%expr Csvfields.Xml.xsd_of_int]
+  let float loc ~field_name:_ = [%expr Csvfields.Xml.xsd_of_float]
+  let int32 loc ~field_name:_ = [%expr Csvfields.Xml.xsd_of_int32]
+  let int64 loc ~field_name:_ = [%expr Csvfields.Xml.xsd_of_int64]
+  let nativeint loc ~field_name:_ = [%expr Csvfields.Xml.xsd_of_nativeint]
+  let big_int loc ~field_name:_ = [%expr Csvfields.Xml.xsd_of_big_int]
+  let nat loc ~field_name:_ = [%expr Csvfields.Xml.xsd_of_nat]
+  let num loc ~field_name:_ = [%expr Csvfields.Xml.xsd_of_num]
+  let ratio loc ~field_name:_ = [%expr Csvfields.Xml.xsd_of_ratio]
+  let merge_recursive = useless_merge_recursive
 
-    let recursive loc ~field_name:_ ~type_name:_ ~path =
-      let tns = "xsd" in
-      edot ~loc path tns
-    ;;
+  let recursive loc ~field_name:_ ~type_name:_ ~path =
+    let tns = "xsd" in
+    edot ~loc path tns
+  ;;
 
-    let list loc ~field_name =
-      [%expr Csvfields.Xml.xsd_of_list [%e estring ~loc field_name]]
-    ;;
+  let list loc ~field_name =
+    [%expr Csvfields.Xml.xsd_of_list [%e estring ~loc field_name]]
+  ;;
 
-    let array loc ~field_name =
-      [%expr Csvfields.Xml.xsd_of_array [%e estring ~loc field_name]]
-    ;;
+  let array loc ~field_name =
+    [%expr Csvfields.Xml.xsd_of_array [%e estring ~loc field_name]]
+  ;;
 
-    let option loc ~field_name =
-      [%expr Csvfields.Xml.xsd_of_option [%e estring ~loc field_name]]
-    ;;
+  let option loc ~field_name =
+    [%expr Csvfields.Xml.xsd_of_option [%e estring ~loc field_name]]
+  ;;
 
-    let lazy_t loc ~field_name:_ = [%expr Csvfields.Xml.xsd_of_lazy_t]
-    let ref loc ~field_name:_ = [%expr Csvfields.Xml.xsd_of_ref]
-  end)
+  let lazy_t loc ~field_name:_ = [%expr Csvfields.Xml.xsd_of_lazy_t]
+  let ref loc ~field_name:_ = [%expr Csvfields.Xml.xsd_of_ref]
+end)
 
 let type_of_xml_function_name = function
   | None -> "of_xml"
@@ -83,60 +83,60 @@ let type_of_xml_function_name = function
 ;;
 
 module Type_of_xml = Ppx_conv_func.Of_complete (struct
-    let unsupported_type_error_msg = unsupported_type_error_msg
-    let conversion_name = extension_name
-    let function_name = type_of_xml_function_name
-    let unit loc ~field_name:_ = [%expr Csvfields.Xml.unit_of_xml]
-    let bool loc ~field_name:_ = [%expr Csvfields.Xml.bool_of_xml]
-    let string loc ~field_name:_ = [%expr Csvfields.Xml.string_of_xml]
-    let char loc ~field_name:_ = [%expr Csvfields.Xml.char_of_xml]
-    let int loc ~field_name:_ = [%expr Csvfields.Xml.int_of_xml]
-    let float loc ~field_name:_ = [%expr Csvfields.Xml.float_of_xml]
-    let int32 loc ~field_name:_ = [%expr Csvfields.Xml.int32_of_xml]
-    let int64 loc ~field_name:_ = [%expr Csvfields.Xml.int64_of_xml]
-    let nativeint loc ~field_name:_ = [%expr Csvfields.Xml.nativeint_of_xml]
-    let big_int loc ~field_name:_ = [%expr Csvfields.Xml.big_int_of_xml]
-    let nat loc ~field_name:_ = [%expr Csvfields.Xml.nat_of_xml]
-    let num loc ~field_name:_ = [%expr Csvfields.Xml.num_of_xml]
-    let ratio loc ~field_name:_ = [%expr Csvfields.Xml.ratio_of_xml]
+  let unsupported_type_error_msg = unsupported_type_error_msg
+  let conversion_name = extension_name
+  let function_name = type_of_xml_function_name
+  let unit loc ~field_name:_ = [%expr Csvfields.Xml.unit_of_xml]
+  let bool loc ~field_name:_ = [%expr Csvfields.Xml.bool_of_xml]
+  let string loc ~field_name:_ = [%expr Csvfields.Xml.string_of_xml]
+  let char loc ~field_name:_ = [%expr Csvfields.Xml.char_of_xml]
+  let int loc ~field_name:_ = [%expr Csvfields.Xml.int_of_xml]
+  let float loc ~field_name:_ = [%expr Csvfields.Xml.float_of_xml]
+  let int32 loc ~field_name:_ = [%expr Csvfields.Xml.int32_of_xml]
+  let int64 loc ~field_name:_ = [%expr Csvfields.Xml.int64_of_xml]
+  let nativeint loc ~field_name:_ = [%expr Csvfields.Xml.nativeint_of_xml]
+  let big_int loc ~field_name:_ = [%expr Csvfields.Xml.big_int_of_xml]
+  let nat loc ~field_name:_ = [%expr Csvfields.Xml.nat_of_xml]
+  let num loc ~field_name:_ = [%expr Csvfields.Xml.num_of_xml]
+  let ratio loc ~field_name:_ = [%expr Csvfields.Xml.ratio_of_xml]
 
-    let merge_recursive loc ~field_name ~tp expr =
-      match tp.ptyp_desc with
-      | Ptyp_constr (id, [ _ ]) ->
-        (match id.txt with
-         | Lident "sexp_option" | Lident "option" ->
-           [%expr
-             fun xml ->
-               match Csvfields.Xml.child xml [%e estring ~loc field_name] with
-               | None -> None
-               | Some _xml -> [%e expr] xml]
-         | _ -> expr)
-      | _ -> expr
-    ;;
+  let merge_recursive loc ~field_name ~tp expr =
+    match tp.ptyp_desc with
+    | Ptyp_constr (id, [ _ ]) ->
+      (match id.txt with
+       | Lident "sexp_option" | Lident "option" ->
+         [%expr
+           fun xml ->
+             match Csvfields.Xml.child xml [%e estring ~loc field_name] with
+             | None -> None
+             | Some _xml -> [%e expr] xml]
+       | _ -> expr)
+    | _ -> expr
+  ;;
 
-    let recursive loc ~field_name ~type_name ~path =
-      let tns = "of_xml" in
-      match type_name with
-      | "sexp_option" | "option" | "list" | "array" ->
-        [%expr [%e edot ~loc path tns] ~tag:[%e estring ~loc field_name]]
-      | _ -> edot ~loc path tns
-    ;;
+  let recursive loc ~field_name ~type_name ~path =
+    let tns = "of_xml" in
+    match type_name with
+    | "sexp_option" | "option" | "list" | "array" ->
+      [%expr [%e edot ~loc path tns] ~tag:[%e estring ~loc field_name]]
+    | _ -> edot ~loc path tns
+  ;;
 
-    let list loc ~field_name =
-      [%expr Csvfields.Xml.list_of_xml ~tag:[%e estring ~loc field_name]]
-    ;;
+  let list loc ~field_name =
+    [%expr Csvfields.Xml.list_of_xml ~tag:[%e estring ~loc field_name]]
+  ;;
 
-    let array loc ~field_name =
-      [%expr Csvfields.Xml.array_of_xml ~tag:[%e estring ~loc field_name]]
-    ;;
+  let array loc ~field_name =
+    [%expr Csvfields.Xml.array_of_xml ~tag:[%e estring ~loc field_name]]
+  ;;
 
-    let option loc ~field_name =
-      [%expr Csvfields.Xml.option_of_xml ~tag:[%e estring ~loc field_name]]
-    ;;
+  let option loc ~field_name =
+    [%expr Csvfields.Xml.option_of_xml ~tag:[%e estring ~loc field_name]]
+  ;;
 
-    let lazy_t loc ~field_name:_ = [%expr Csvfields.Xml.lazy_t_of_xml]
-    let ref loc ~field_name:_ = [%expr Csvfields.Xml.ref_of_xml]
-  end)
+  let lazy_t loc ~field_name:_ = [%expr Csvfields.Xml.lazy_t_of_xml]
+  let ref loc ~field_name:_ = [%expr Csvfields.Xml.ref_of_xml]
+end)
 
 let xml_of_type_function_name = function
   | None -> "to_xml"
@@ -144,47 +144,47 @@ let xml_of_type_function_name = function
 ;;
 
 module Xml_of_type = Ppx_conv_func.Of_complete (struct
-    let unsupported_type_error_msg = unsupported_type_error_msg
-    let conversion_name = extension_name
-    let function_name = xml_of_type_function_name
-    let unit loc ~field_name:_ = [%expr Csvfields.Xml.xml_of_unit]
-    let bool loc ~field_name:_ = [%expr Csvfields.Xml.xml_of_bool]
-    let string loc ~field_name:_ = [%expr Csvfields.Xml.xml_of_string]
-    let char loc ~field_name:_ = [%expr Csvfields.Xml.xml_of_char]
-    let int loc ~field_name:_ = [%expr Csvfields.Xml.xml_of_int]
-    let float loc ~field_name:_ = [%expr Csvfields.Xml.xml_of_float]
-    let int32 loc ~field_name:_ = [%expr Csvfields.Xml.xml_of_int32]
-    let int64 loc ~field_name:_ = [%expr Csvfields.Xml.xml_of_int64]
-    let big_int loc ~field_name:_ = [%expr Csvfields.Xml.xml_of_big_int]
-    let nat loc ~field_name:_ = [%expr Csvfields.Xml.xml_of_nat]
-    let num loc ~field_name:_ = [%expr Csvfields.Xml.xml_of_num]
-    let ratio loc ~field_name:_ = [%expr Csvfields.Xml.xml_of_ratio]
-    let nativeint loc ~field_name:_ = [%expr Csvfields.Xml.xml_of_nativeint]
-    let merge_recursive = useless_merge_recursive
+  let unsupported_type_error_msg = unsupported_type_error_msg
+  let conversion_name = extension_name
+  let function_name = xml_of_type_function_name
+  let unit loc ~field_name:_ = [%expr Csvfields.Xml.xml_of_unit]
+  let bool loc ~field_name:_ = [%expr Csvfields.Xml.xml_of_bool]
+  let string loc ~field_name:_ = [%expr Csvfields.Xml.xml_of_string]
+  let char loc ~field_name:_ = [%expr Csvfields.Xml.xml_of_char]
+  let int loc ~field_name:_ = [%expr Csvfields.Xml.xml_of_int]
+  let float loc ~field_name:_ = [%expr Csvfields.Xml.xml_of_float]
+  let int32 loc ~field_name:_ = [%expr Csvfields.Xml.xml_of_int32]
+  let int64 loc ~field_name:_ = [%expr Csvfields.Xml.xml_of_int64]
+  let big_int loc ~field_name:_ = [%expr Csvfields.Xml.xml_of_big_int]
+  let nat loc ~field_name:_ = [%expr Csvfields.Xml.xml_of_nat]
+  let num loc ~field_name:_ = [%expr Csvfields.Xml.xml_of_num]
+  let ratio loc ~field_name:_ = [%expr Csvfields.Xml.xml_of_ratio]
+  let nativeint loc ~field_name:_ = [%expr Csvfields.Xml.xml_of_nativeint]
+  let merge_recursive = useless_merge_recursive
 
-    let recursive loc ~field_name ~type_name ~path =
-      let tns = function_name None in
-      match type_name with
-      | "sexp_option" | "option" | "list" | "array" ->
-        [%expr [%e edot ~loc path tns] ~tag:[%e estring ~loc field_name]]
-      | _ -> edot ~loc path tns
-    ;;
+  let recursive loc ~field_name ~type_name ~path =
+    let tns = function_name None in
+    match type_name with
+    | "sexp_option" | "option" | "list" | "array" ->
+      [%expr [%e edot ~loc path tns] ~tag:[%e estring ~loc field_name]]
+    | _ -> edot ~loc path tns
+  ;;
 
-    let list loc ~field_name =
-      [%expr Csvfields.Xml.xml_of_list ~tag:[%e estring ~loc field_name]]
-    ;;
+  let list loc ~field_name =
+    [%expr Csvfields.Xml.xml_of_list ~tag:[%e estring ~loc field_name]]
+  ;;
 
-    let array loc ~field_name =
-      [%expr Csvfields.Xml.xml_of_array ~tag:[%e estring ~loc field_name]]
-    ;;
+  let array loc ~field_name =
+    [%expr Csvfields.Xml.xml_of_array ~tag:[%e estring ~loc field_name]]
+  ;;
 
-    let option loc ~field_name =
-      [%expr Csvfields.Xml.xml_of_option ~tag:[%e estring ~loc field_name]]
-    ;;
+  let option loc ~field_name =
+    [%expr Csvfields.Xml.xml_of_option ~tag:[%e estring ~loc field_name]]
+  ;;
 
-    let lazy_t loc ~field_name:_ = [%expr Csvfields.Xml.xml_of_lazy_t]
-    let ref loc ~field_name:_ = [%expr Csvfields.Xml.xml_of_ref]
-  end)
+  let lazy_t loc ~field_name:_ = [%expr Csvfields.Xml.xml_of_lazy_t]
+  let ref loc ~field_name:_ = [%expr Csvfields.Xml.xml_of_ref]
+end)
 
 let make_xsd_definition loc arg_tys =
   List.fold_right arg_tys ~init:[%type: Csvfields.Xml.xml list] ~f:(fun _arg_ty acc ->
@@ -251,10 +251,10 @@ let of_xml ~tps ~lds loc =
         else
           ( Located.lident ~loc field_name
           , [%expr
-            Csvfields.Xml.recursive_of_xml
-              [%e estring ~loc field_name]
-              [%e conversion_fun]
-              xml] ))
+              Csvfields.Xml.recursive_of_xml
+                [%e estring ~loc field_name]
+                [%e conversion_fun]
+                xml] ))
       fields
   in
   let record = pexp_record ~loc bindings None in
