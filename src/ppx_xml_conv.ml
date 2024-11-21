@@ -219,8 +219,8 @@ let xml_record_sig ~tps ~record_name loc =
 ;;
 
 let param_of_ctyp ty =
-  match ty.ptyp_desc with
-  | Ptyp_var param -> Some param
+  match Ppxlib_jane.Shim.Core_type_desc.of_parsetree ty.ptyp_desc with
+  | Ptyp_var (param, _) -> Some param
   | _ -> None
 ;;
 
